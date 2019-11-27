@@ -4,18 +4,26 @@ const mongoose = require('mongoose');
 const Fruit = require('./models/fruits.js');
 const methodOverride = require('method-override');
 
+//PORT
+const PORT = process.env.PORT || 3000;
+
 app.set('view engine', 'jsx');
 app.engine('jsx', require('express-react-views').createEngine());
 app.use(express.static('public')); //tells express to try to match requests with files in the directory called 'public'
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
+
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/basiccrud';
+
 // connect to mongoose
-mongoose.connect('mongodb://localhost:27017/basiccrud', {
+mongoose.connect(MONGODB_URI, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 	useFindAndModify: true
 });
+
+
 mongoose.connection.once('open', () => {
 	console.log('connected to mongo');
 });
@@ -86,6 +94,6 @@ app.put('/fruits/:id', (req, res) => {
 	});
 });
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
 	console.log('listening');
 });
